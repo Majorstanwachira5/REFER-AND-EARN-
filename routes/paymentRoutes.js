@@ -12,7 +12,7 @@ router.get('/pay', requireAuth, (req, res) => {
 
   res.render('pay', {
     user: req.user,
-    paystackPublicKey: process.env.PAYSTACK_PUBLIC_KEY || 'pk_test_1234567890abcdef1234567890abcdef12345678',
+    paystackPublicKey: process.env.PAYSTACK_PUBLIC_KEY || 'pk_live_2b4b2db53230210e899c86c257247bf295934593',
     amount: 250
   });
 });

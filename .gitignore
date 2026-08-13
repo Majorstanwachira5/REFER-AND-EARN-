@@ -1,5 +1,7 @@
 node_modules/
+npm-debug.log
+.DS_Store
+*.db
+data/
 .env
-ramnet.db
-ramnet_fallback_db.json
-*.log
+.env.local
