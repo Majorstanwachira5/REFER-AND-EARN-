@@ -1,0 +1,180 @@
+<%- include('layout/header', { title: 'Refer & Earn More - Unlock Your Multi-Tier Commissions', user: typeof user !== 'undefined' ? user : null }) %>
+
+<div class="landing-hero-container">
+    <div class="split-auth-card">
+        
+        <!-- LEFT COLUMN: Auth Card (Login & Registration) -->
+        <div class="auth-card-left">
+            <div class="auth-header">
+                <div class="auth-ram-logo">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="ram-svg-large">
+                        <path d="M16 22C12 16 8 16 6 20C4 24 6 30 12 32C18 34 22 28 20 22Z" fill="url(#gold-grad-lg1)"/>
+                        <path d="M48 22C52 16 56 16 58 20C60 24 58 30 52 32C46 34 42 28 44 22Z" fill="url(#gold-grad-lg1)"/>
+                        <path d="M32 14C22 14 18 24 20 34C22 44 32 50 32 50C32 50 42 44 44 34C46 24 42 14 32 14Z" fill="url(#gold-grad-lg2)"/>
+                        <circle cx="26" cy="30" r="3" fill="#0a2540"/>
+                        <circle cx="38" cy="30" r="3" fill="#0a2540"/>
+                        <polygon points="32,36 28,42 36,42" fill="#d4af37"/>
+                        <defs>
+                            <linearGradient id="gold-grad-lg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f5a623"/>
+                                <stop offset="100%" stop-color="#d4af37"/>
+                            </linearGradient>
+                            <linearGradient id="gold-grad-lg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffe28a"/>
+                                <stop offset="100%" stop-color="#f5a623"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h2 class="auth-title">Unlock Your Earnings</h2>
+                <p class="auth-subtitle">Become a RAM Agent & Start Earning Instant Commissions</p>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="auth-tabs">
+                <button type="button" class="tab-btn <%= typeof activeTab === 'undefined' || activeTab === 'login' ? 'active' : '' %>" onclick="switchAuthTab('login')">
+                    <i class="fa-solid fa-lock"></i> Agent Sign In
+                </button>
+                <button type="button" class="tab-btn <%= typeof activeTab !== 'undefined' && activeTab === 'register' ? 'active' : '' %>" onclick="switchAuthTab('register')">
+                    <i class="fa-solid fa-user-plus"></i> Join Network
+                </button>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert-banner error">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span><%= error %></span>
+                </div>
+            <% } %>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form" action="/login" method="POST" class="auth-form <%= typeof activeTab === 'undefined' || activeTab === 'login' ? '' : 'hidden' %>">
+                <div class="form-group">
+                    <label for="login-email"><i class="fa-solid fa-envelope gold-text"></i> Email Address</label>
+                    <input type="email" id="login-email" name="email" placeholder="agent@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password"><i class="fa-solid fa-key gold-text"></i> Password</label>
+                    <input type="password" id="login-password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-block btn-lg">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In To Dashboard
+                </button>
+
+                <div class="form-footer-note">
+                    Don't have an account yet? <a href="javascript:void(0)" onclick="switchAuthTab('register')" class="gold-link">Register as a RAM Agent</a>
+                </div>
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="register-form" action="/register" method="POST" class="auth-form <%= typeof activeTab !== 'undefined' && activeTab === 'register' ? '' : 'hidden' %>">
+                <div class="form-group">
+                    <label for="reg-name"><i class="fa-solid fa-user gold-text"></i> Full Name</label>
+                    <input type="text" id="reg-name" name="name" placeholder="John Doe" required autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email"><i class="fa-solid fa-envelope gold-text"></i> Email Address</label>
+                    <input type="email" id="reg-email" name="email" placeholder="john@example.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password"><i class="fa-solid fa-key gold-text"></i> Create Password</label>
+                    <input type="password" id="reg-password" name="password" placeholder="Minimum 6 characters" required autocomplete="new-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-refcode"><i class="fa-solid fa-ticket gold-text"></i> Referral Code (Optional)</label>
+                    <input type="text" id="reg-refcode" name="ref_code" value="<%= typeof ref_code !== 'undefined' ? ref_code : '' %>" placeholder="e.g. RAM8X92K" style="text-transform: uppercase;">
+                    <small class="help-text">If referred by an active agent, enter their code here.</small>
+                </div>
+
+                <div class="fee-notice-box">
+                    <i class="fa-solid fa-circle-info gold-text"></i>
+                    <span>One-time registration fee: <strong>₦250</strong> (Paid after registration via Paystack).</span>
+                </div>
+
+                <button type="submit" class="btn btn-gold btn-block btn-lg">
+                    <i class="fa-solid fa-bolt"></i> Register & Proceed to Pay ₦250
+                </button>
+
+                <div class="form-footer-note">
+                    Already registered? <a href="javascript:void(0)" onclick="switchAuthTab('login')" class="gold-link">Sign In Here</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- RIGHT COLUMN: How It Works & Instructions -->
+        <div class="auth-card-right">
+            <div class="instructions-container">
+                <div class="instructions-header">
+                    <span class="badge-gold">How It Works</span>
+                    <h2>3 Simple Steps To Infinite Commissions</h2>
+                    <p>Refer & Earn More operates on a high-yield, 2-tier commission network structure.</p>
+                </div>
+
+                <div class="steps-timeline">
+                    <!-- Step 1 -->
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3><i class="fa-solid fa-credit-card gold-text"></i> Step 1: Join</h3>
+                            <p>Pay a one-time joining fee of <strong>₦250</strong> via Paystack to activate your RAM Agent license and unlock your dashboard.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3><i class="fa-solid fa-share-nodes gold-text"></i> Step 2: Refer</h3>
+                            <p>Get your unique agent link (e.g. <code>ramnet.com/register?ref=RAM123</code>) and share it with friends, colleagues, and social networks.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3><i class="fa-solid fa-sack-dollar gold-text"></i> Step 3: Earn</h3>
+                            <ul class="earning-highlights">
+                                <li><i class="fa-solid fa-circle-check text-gold"></i> <strong>₦100 Instant Commission</strong> for every Direct referral (Level 1).</li>
+                                <li><i class="fa-solid fa-circle-check text-gold"></i> <strong>₦50 Instant Commission</strong> for every Indirect referral (Level 2).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mathematical Breakdown Box -->
+                <div class="math-proof-card">
+                    <h4><i class="fa-solid fa-calculator gold-text"></i> Commission Math Example</h4>
+                    <div class="math-grid">
+                        <div class="math-item">
+                            <span class="math-label">You Refer 10 Agents (Level 1)</span>
+                            <span class="math-val">10 × ₦100 = <strong>₦1,000</strong></span>
+                        </div>
+                        <div class="math-item">
+                            <span class="math-label">They Each Refer 10 Agents (Level 2)</span>
+                            <span class="math-val">100 × ₦50 = <strong>₦5,000</strong></span>
+                        </div>
+                        <div class="math-total">
+                            <span>Total Earnings on 10 Referrals:</span>
+                            <span class="gold-price">₦6,000.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instructions-cta">
+                    <button type="button" class="btn btn-outline-gold btn-block" onclick="switchAuthTab('register')">
+                        <i class="fa-solid fa-rocket"></i> Get Started Now - Join for ₦250
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include('layout/footer') %>

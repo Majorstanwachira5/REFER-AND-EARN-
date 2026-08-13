@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'Refer & Earn More (RamNet) - 2-Tier Agent Referral Network' %></title>
+    <!-- Modern Typography from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- RAM Custom Styling -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <a href="/" class="brand-logo">
+                <div class="ram-logo-icon">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="ram-svg">
+                        <!-- Stylized Ram Horns and Head in Gold -->
+                        <path d="M16 22C12 16 8 16 6 20C4 24 6 30 12 32C18 34 22 28 20 22Z" fill="url(#gold-grad-1)"/>
+                        <path d="M48 22C52 16 56 16 58 20C60 24 58 30 52 32C46 34 42 28 44 22Z" fill="url(#gold-grad-1)"/>
+                        <path d="M32 14C22 14 18 24 20 34C22 44 32 50 32 50C32 50 42 44 44 34C46 24 42 14 32 14Z" fill="url(#gold-grad-2)"/>
+                        <circle cx="26" cy="30" r="3" fill="#0a2540"/>
+                        <circle cx="38" cy="30" r="3" fill="#0a2540"/>
+                        <polygon points="32,36 28,42 36,42" fill="#d4af37"/>
+                        <defs>
+                            <linearGradient id="gold-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f5a623"/>
+                                <stop offset="100%" stop-color="#d4af37"/>
+                            </linearGradient>
+                            <linearGradient id="gold-grad-2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffe28a"/>
+                                <stop offset="100%" stop-color="#f5a623"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">Refer & Earn <span class="gold-text">More</span></span>
+                    <span class="brand-tagline">RamNet Tiered Commissions</span>
+                </div>
+            </a>
+
+            <nav class="header-nav">
+                <% if (typeof user !== 'undefined' && user) { %>
+                    <div class="user-badge">
+                        <span class="user-name"><i class="fa-solid fa-user-circle"></i> <%= user.name %></span>
+                        <% if (Number(user.paid_status) === 1) { %>
+                            <span class="status-badge active"><i class="fa-solid fa-check-circle"></i> Active Agent</span>
+                        <% } else { %>
+                            <span class="status-badge pending"><i class="fa-solid fa-clock"></i> Pending ₦250 Fee</span>
+                        <% } %>
+                    </div>
+
+                    <% if (Number(user.paid_status) === 1) { %>
+                        <a href="/dashboard" class="nav-btn secondary"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                    <% } else { %>
+                        <a href="/pay" class="nav-btn gold-pulse"><i class="fa-solid fa-bolt"></i> Pay ₦250</a>
+                    <% } %>
+
+                    <a href="/logout" class="nav-btn outline"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                <% } else { %>
+                    <a href="/login" class="nav-btn primary"><i class="fa-solid fa-right-to-bracket"></i> Sign In</a>
+                    <a href="/register" class="nav-btn gold"><i class="fa-solid fa-user-plus"></i> Register</a>
+                <% } %>
+            </nav>
+        </div>
+    </header>
+    <main class="main-content">

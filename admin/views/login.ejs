@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAM Admin Portal - Executive Authentication (Port 3001)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .admin-login-box {
+            max-width: 440px;
+            margin: 80px auto;
+            background: #0f2d4e;
+            border: 2px solid #f5a623;
+            border-radius: 16px;
+            padding: 36px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .admin-badge {
+            background: #f5a623;
+            color: #071626;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login-box">
+        <div style="text-align: center; margin-bottom: 24px;">
+            <span class="admin-badge">RAMNET ADMIN PORTAL (PORT 3001)</span>
+            <h2 style="font-size: 1.8rem; font-weight: 800; color: #fff;">Executive Sign In</h2>
+            <p style="font-size: 0.88rem; color: #94a3b8;">Enter administrator credentials to manage platform revenue and user network.</p>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert-banner error" style="margin-bottom: 20px;">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span><%= error %></span>
+            </div>
+        <% } %>
+
+        <form action="/login" method="POST" class="auth-form">
+            <div class="form-group">
+                <label for="admin-email"><i class="fa-solid fa-user-shield text-gold"></i> Admin Email</label>
+                <input type="email" id="admin-email" name="email" value="admin@ramnet.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="admin-password"><i class="fa-solid fa-lock text-gold"></i> Password</label>
+                <input type="password" id="admin-password" name="password" value="admin123password" required>
+            </div>
+
+            <button type="submit" class="btn btn-gold btn-block btn-lg" style="margin-top: 10px;">
+                <i class="fa-solid fa-key"></i> Authenticate Administrator
+            </button>
+        </form>
+
+        <div style="margin-top: 24px; text-align: center; font-size: 0.8rem; color: #94a3b8;">
+            <span>Default Seed Admin: <code>admin@ramnet.com</code> / <code>admin123password</code></span>
+        </div>
+    </div>
+</body>
+</html>

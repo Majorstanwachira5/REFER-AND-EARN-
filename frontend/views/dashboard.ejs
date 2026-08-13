@@ -1,0 +1,270 @@
+<%- include('layout/header', { title: 'RAM Agent Dashboard - Refer & Earn More', user: user }) %>
+
+<div class="dashboard-container">
+    
+    <div class="dashboard-welcome-banner">
+        <div class="welcome-text">
+            <h2>Welcome back, <span class="gold-text"><%= user.name %></span>! 👋</h2>
+            <p>Your RAM Agent account is <span class="badge-status-active"><i class="fa-solid fa-circle-check"></i> ACTIVE</span>. Earn <strong>₦100</strong> per direct and <strong>₦50</strong> per indirect referral.</p>
+        </div>
+        <div class="agent-code-badge">
+            <span class="badge-label">YOUR AGENT CODE</span>
+            <span class="badge-code"><%= user.referral_code %></span>
+        </div>
+    </div>
+
+    <!-- Stats Cards Grid -->
+    <div class="stats-grid">
+        <div class="stat-card gold-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div class="stat-details">
+                <span class="stat-label">Available Wallet Balance</span>
+                <h3 class="stat-value">₦<%= Number(stats.walletBalance).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></h3>
+                <button type="button" class="btn btn-sm btn-dark mt-2" onclick="openWithdrawModal()">
+                    <i class="fa-solid fa-money-bill-transfer gold-text"></i> Withdraw Funds
+                </button>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon direct">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <div class="stat-details">
+                <span class="stat-label">Direct Referrals (Level 1)</span>
+                <h3 class="stat-value"><%= stats.directCount %> <span class="stat-sub">Agents</span></h3>
+                <span class="stat-earned"><i class="fa-solid fa-arrow-up-right-dots text-gold"></i> Earned: ₦<%= Number(stats.directEarnings).toLocaleString('en-NG', { minimumFractionDigits: 2 }) %></span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon indirect">
+                <i class="fa-solid fa-sitemap"></i>
+            </div>
+            <div class="stat-details">
+                <span class="stat-label">Indirect Referrals (Level 2)</span>
+                <h3 class="stat-value"><%= stats.indirectCount %> <span class="stat-sub">Agents</span></h3>
+                <span class="stat-earned"><i class="fa-solid fa-arrow-up-right-dots text-gold"></i> Earned: ₦<%= Number(stats.indirectEarnings).toLocaleString('en-NG', { minimumFractionDigits: 2 }) %></span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon total">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div class="stat-details">
+                <span class="stat-label">Total Earnings</span>
+                <h3 class="stat-value gold-text">₦<%= Number(stats.totalEarned).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></h3>
+                <span class="stat-earned">Cumulative Commissions</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Link Box -->
+    <div class="referral-link-section">
+        <div class="link-card-header">
+            <div class="link-title">
+                <i class="fa-solid fa-link gold-text"></i>
+                <div>
+                    <h3>Your Unique Agent Referral Link</h3>
+                    <p>Share this link to earn <strong>₦100</strong> direct + <strong>₦50</strong> indirect.</p>
+                </div>
+            </div>
+            <span class="commission-badge">₦100 Direct + ₦50 Indirect</span>
+        </div>
+
+        <div class="link-input-group">
+            <div class="input-wrapper">
+                <i class="fa-solid fa-globe input-icon"></i>
+                <input type="text" id="referral-url-input" value="<%= referralLink %>" readonly>
+            </div>
+            <button type="button" id="copy-link-btn" class="btn btn-gold" onclick="copyReferralLink()">
+                <i class="fa-solid fa-copy"></i> <span id="copy-btn-text">Copy Link</span>
+            </button>
+        </div>
+        <div id="copy-toast" class="copy-toast hidden">
+            <i class="fa-solid fa-check-circle"></i> Referral link copied to clipboard!
+        </div>
+    </div>
+
+    <!-- Dashboard Main Grid -->
+    <div class="dashboard-columns">
+        <div class="dashboard-card main-card">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-diagram-project gold-text"></i> Referral Network Tree</h3>
+                <div class="tree-tabs">
+                    <button type="button" class="tree-tab-btn active" onclick="switchTreeTab('direct')">
+                        Level 1 (Direct - <%= stats.directCount %>)
+                    </button>
+                    <button type="button" class="tree-tab-btn" onclick="switchTreeTab('indirect')">
+                        Level 2 (Indirect - <%= stats.indirectCount %>)
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div id="direct-tree-panel" class="tree-panel">
+                    <% if (directReferrals.length === 0) { %>
+                        <div class="empty-state">
+                            <i class="fa-solid fa-users-slash empty-icon"></i>
+                            <h4>No Direct Referrals Yet</h4>
+                            <p>Share your link to recruit RAM Agents and earn ₦100 per join!</p>
+                        </div>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Agent Name</th>
+                                        <th>Email</th>
+                                        <th>Joined Date</th>
+                                        <th>Status</th>
+                                        <th>Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% directReferrals.forEach(ref => { %>
+                                        <tr>
+                                            <td>
+                                                <div class="user-cell">
+                                                    <div class="avatar"><%= ref.referee_name.charAt(0).toUpperCase() %></div>
+                                                    <strong><%= ref.referee_name %></strong>
+                                                </div>
+                                            </td>
+                                            <td><%= ref.referee_email %></td>
+                                            <td><%= new Date(ref.created_at).toLocaleDateString('en-GB') %></td>
+                                            <td><span class="badge-status-active">Active</span></td>
+                                            <td><strong class="gold-text">+₦100.00</strong></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } %>
+                </div>
+
+                <div id="indirect-tree-panel" class="tree-panel hidden">
+                    <% if (indirectReferrals.length === 0) { %>
+                        <div class="empty-state">
+                            <i class="fa-solid fa-sitemap empty-icon"></i>
+                            <h4>No Indirect Referrals Yet</h4>
+                            <p>When your direct agents recruit members, they earn you ₦50 each!</p>
+                        </div>
+                    <% } else { %>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Sub-Agent Name</th>
+                                        <th>Email</th>
+                                        <th>Joined Date</th>
+                                        <th>Level</th>
+                                        <th>Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% indirectReferrals.forEach(ref => { %>
+                                        <tr>
+                                            <td>
+                                                <div class="user-cell">
+                                                    <div class="avatar sub"><%= ref.referee_name.charAt(0).toUpperCase() %></div>
+                                                    <strong><%= ref.referee_name %></strong>
+                                                </div>
+                                            </td>
+                                            <td><%= ref.referee_email %></td>
+                                            <td><%= new Date(ref.created_at).toLocaleDateString('en-GB') %></td>
+                                            <td><span class="badge-level">Level 2</span></td>
+                                            <td><strong class="gold-text">+₦50.00</strong></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-card side-card">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-receipt gold-text"></i> Recent Activity Feed</h3>
+            </div>
+            <div class="card-body">
+                <% if (transactions.length === 0) { %>
+                    <div class="empty-state compact">
+                        <i class="fa-solid fa-clock-rotate-left empty-icon"></i>
+                        <p>No transaction history yet.</p>
+                    </div>
+                <% } else { %>
+                    <div class="transaction-list">
+                        <% transactions.forEach(tx => { %>
+                            <div class="tx-item <%= tx.type %>">
+                                <div class="tx-icon">
+                                    <i class="fa-solid <%= tx.type === 'credit' ? 'fa-arrow-down-left text-success' : 'fa-arrow-up-right text-danger' %>"></i>
+                                </div>
+                                <div class="tx-info">
+                                    <span class="tx-desc"><%= tx.description %></span>
+                                    <span class="tx-time"><%= new Date(tx.created_at).toLocaleString() %></span>
+                                </div>
+                                <div class="tx-amount <%= tx.type %>">
+                                    <%= tx.type === 'credit' ? '+' : '-' %>₦<%= Number(tx.amount).toFixed(2) %>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Withdraw Modal -->
+<div id="withdraw-modal" class="modal-backdrop hidden">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-wallet gold-text"></i> Withdraw Wallet Funds</h3>
+            <button type="button" class="close-modal-btn" onclick="closeWithdrawModal()">&times;</button>
+        </div>
+        <form id="withdraw-form" onsubmit="handleWithdraw(event, '<%= backendUrl %>')">
+            <div class="modal-body">
+                <div class="balance-display-box">
+                    <span>Available Balance:</span>
+                    <strong class="gold-text">₦<%= Number(stats.walletBalance).toFixed(2) %></strong>
+                </div>
+
+                <div class="form-group">
+                    <label for="w-amount">Amount to Withdraw (₦)</label>
+                    <input type="number" id="w-amount" min="100" max="<%= stats.walletBalance %>" step="50" placeholder="e.g. 500" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="w-bank">Select Bank</label>
+                    <select id="w-bank" required>
+                        <option value="">-- Choose Bank --</option>
+                        <option value="GTBank">GTBank</option>
+                        <option value="Access Bank">Access Bank</option>
+                        <option value="First Bank">First Bank</option>
+                        <option value="Kuda Bank">Kuda Bank</option>
+                        <option value="OPay">OPay</option>
+                        <option value="Palmpay">Palmpay</option>
+                        <option value="Zenith Bank">Zenith Bank</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="w-account">Account Number</label>
+                    <input type="text" id="w-account" maxlength="10" placeholder="10-digit NUBAN" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeWithdrawModal()">Cancel</button>
+                <button type="submit" class="btn btn-gold"><i class="fa-solid fa-paper-plane"></i> Submit Request</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('layout/footer') %>

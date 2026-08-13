@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm install --production
+
+COPY . .
+
+EXPOSE 3001
+
+ENV PORT=3001
+ENV ADMIN_PORT=3001
+ENV BACKEND_URL=http://backend:8080
+
+CMD ["node", "admin/server.js"]

@@ -1,0 +1,123 @@
+<%- include('layout/header', { title: 'Activate Account - Pay ₦250 Fee', user: user }) %>
+
+<div class="checkout-container">
+    <div class="checkout-card">
+        <div class="checkout-header">
+            <div class="checkout-badge"><i class="fa-solid fa-shield-halved"></i> Account Activation Required</div>
+            <h2>Pay One-Time ₦250 Fee</h2>
+            <p>Welcome, <strong><%= user.name %></strong>! Pay your agent fee to receive your referral link and start earning.</p>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-row">
+                <span>Account Holder</span>
+                <strong><%= user.name %></strong>
+            </div>
+            <div class="summary-row">
+                <span>Email Address</span>
+                <strong><%= user.email %></strong>
+            </div>
+            <div class="summary-row">
+                <span>Referral Code Assigned</span>
+                <span class="gold-badge"><%= user.referral_code %></span>
+            </div>
+            <hr class="summary-divider">
+            <div class="summary-row total">
+                <span>Registration Fee</span>
+                <span class="total-amount">₦250.00</span>
+            </div>
+        </div>
+
+        <div class="payment-actions">
+            <button type="button" id="paystack-btn" class="btn btn-gold btn-block btn-lg">
+                <i class="fa-solid fa-credit-card"></i> Pay ₦250 Securely with Paystack
+            </button>
+
+            <div class="or-divider">
+                <span>OR FOR LOCAL TESTING</span>
+            </div>
+
+            <button type="button" id="demo-bypass-btn" class="btn btn-secondary-outline btn-block">
+                <i class="fa-solid fa-flask"></i> Simulate Instant Payment (Sandbox Demo Bypass)
+            </button>
+        </div>
+
+        <div class="pay-guarantee">
+            <i class="fa-solid fa-lock text-gold"></i>
+            <span>Payments processed via 256-bit encrypted Paystack Gateway.</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script>
+    const PAYSTACK_PUBLIC_KEY = "<%= paystackPublicKey %>";
+    const USER_EMAIL = "<%= user.email %>";
+    const USER_NAME = "<%= user.name %>";
+    const USER_ID = <%= user.id %>;
+    const BACKEND_URL = "<%= backendUrl %>";
+
+    document.getElementById('paystack-btn').addEventListener('click', function() {
+        const reference = 'RAM_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: USER_EMAIL,
+            amount: 25000,
+            currency: 'NGN',
+            ref: reference,
+            callback: function(response) {
+                verifyPaymentOnServer(response.reference);
+            },
+            onClose: function() {
+                alert('Payment window closed.');
+            }
+        });
+
+        handler.openIframe();
+    });
+
+    document.getElementById('demo-bypass-btn').addEventListener('click', async function() {
+        if (!confirm('Simulate successful ₦250 payment for testing?')) return;
+        
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/payment/demo-bypass`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(data.message);
+                window.location.href = '/dashboard';
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (err) {
+            alert('Failed to simulate demo payment: ' + err.message);
+        }
+    });
+
+    async function verifyPaymentOnServer(ref) {
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/payment/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ reference: ref })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert('Payment Verified! Account Activated.');
+                window.location.href = '/dashboard';
+            } else {
+                alert('Payment Verification Failed: ' + data.message);
+            }
+        } catch (err) {
+            alert('Server error verifying payment: ' + err.message);
+        }
+    }
+</script>
+
+<%- include('layout/footer') %>

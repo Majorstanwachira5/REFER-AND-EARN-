@@ -1,0 +1,32 @@
+{
+  "name": "refer-and-earn-more",
+  "version": "2.0.0",
+  "description": "Refer & Earn More (RamNet) - Decoupled Multi-Service Architecture with Swagger API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "backend": "node backend/server.js",
+    "frontend": "node frontend/server.js",
+    "admin": "node admin/server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "referral",
+    "paystack",
+    "swagger",
+    "ramnet"
+  ],
+  "dependencies": {
+    "axios": "^1.7.2",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  }
+}

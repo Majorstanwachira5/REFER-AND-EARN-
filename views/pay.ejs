@@ -1,0 +1,141 @@
+<%- include('layout/header', { title: 'Activate Account - Pay ₦250 Fee', user: user }) %>
+
+<div class="checkout-container">
+    <div class="checkout-card">
+        <div class="checkout-header">
+            <div class="checkout-badge"><i class="fa-solid fa-shield-halved"></i> Account Activation Required</div>
+            <h2>Pay One-Time ₦250 Fee</h2>
+            <p>Welcome, <strong><%= user.name %></strong>! Pay your agent joining fee to receive your unique referral link and start earning commissions.</p>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-row">
+                <span>Account Holder</span>
+                <strong><%= user.name %></strong>
+            </div>
+            <div class="summary-row">
+                <span>Email Address</span>
+                <strong><%= user.email %></strong>
+            </div>
+            <div class="summary-row">
+                <span>Referral Code Assigned</span>
+                <span class="gold-badge"><%= user.referral_code %></span>
+            </div>
+            <hr class="summary-divider">
+            <div class="summary-row total">
+                <span>Registration Fee</span>
+                <span class="total-amount">₦250.00</span>
+            </div>
+        </div>
+
+        <div class="payment-actions">
+            <!-- Paystack Inline Launcher Button -->
+            <button type="button" id="paystack-btn" class="btn btn-gold btn-block btn-lg">
+                <i class="fa-solid fa-credit-card"></i> Pay ₦250 Securely with Paystack
+            </button>
+
+            <div class="or-divider">
+                <span>OR FOR TESTING</span>
+            </div>
+
+            <!-- Demo Bypass Button for Local Testing -->
+            <button type="button" id="demo-bypass-btn" class="btn btn-secondary-outline btn-block">
+                <i class="fa-solid fa-flask"></i> Simulate Instant Payment (Sandbox Demo Bypass)
+            </button>
+        </div>
+
+        <div class="pay-guarantee">
+            <i class="fa-solid fa-lock text-gold"></i>
+            <span>Payments processed via 256-bit encrypted Paystack Gateway. Instant commission payout upon payment confirmation.</span>
+        </div>
+    </div>
+</div>
+
+<!-- Paystack Inline JS Library -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<script>
+    const PAYSTACK_PUBLIC_KEY = "<%= paystackPublicKey %>";
+    const USER_EMAIL = "<%= user.email %>";
+    const USER_NAME = "<%= user.name %>";
+    const USER_ID = <%= user.id %>;
+
+    document.getElementById('paystack-btn').addEventListener('click', function() {
+        // Generate unique Paystack transaction reference
+        const reference = 'RAM_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
+
+        const handler = PaystackPop.setup({
+            key: PAYSTACK_PUBLIC_KEY,
+            email: USER_EMAIL,
+            amount: 25000, // ₦250 in Kobo
+            currency: 'NGN',
+            ref: reference,
+            metadata: {
+                custom_fields: [
+                    {
+                        display_name: "Agent Name",
+                        variable_name: "agent_name",
+                        value: USER_NAME
+                    },
+                    {
+                        display_name: "Agent ID",
+                        variable_name: "agent_id",
+                        value: USER_ID
+                    }
+                ]
+            },
+            callback: function(response) {
+                // Payment success callback from Paystack
+                verifyPaymentOnServer(response.reference);
+            },
+            onClose: function() {
+                alert('Payment window closed. Please complete payment to activate your agent dashboard.');
+            }
+        });
+
+        handler.openIframe();
+    });
+
+    // Sandbox Demo Bypass Handler
+    document.getElementById('demo-bypass-btn').addEventListener('click', async function() {
+        if (!confirm('Simulate successful ₦250 payment for testing?')) return;
+        
+        try {
+            const res = await fetch('/api/payment/demo-bypass', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert(data.message);
+                window.location.href = data.redirect || '/dashboard';
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (err) {
+            alert('Failed to simulate demo payment: ' + err.message);
+        }
+    });
+
+    async function verifyPaymentOnServer(ref) {
+        try {
+            const res = await fetch('/api/payment/verify', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reference: ref })
+            });
+
+            const data = await res.json();
+            if (data.success) {
+                alert('Payment Verified! Account Activated.');
+                window.location.href = data.redirect || '/dashboard';
+            } else {
+                alert('Payment Verification Failed: ' + data.message);
+            }
+        } catch (err) {
+            alert('Server error verifying payment: ' + err.message);
+        }
+    }
+</script>
+
+<%- include('layout/footer') %>
