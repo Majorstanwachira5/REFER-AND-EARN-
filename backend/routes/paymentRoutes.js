@@ -8,7 +8,7 @@ const { processReferralBonus } = require('../services/bonusEngine');
  * @openapi
  * /api/payment/verify:
  *   post:
- *     summary: Verify Paystack ₦250 payment reference and trigger referral bonus engine
+ *     summary: Verify Paystack KSh. 250 payment reference and trigger referral bonus engine
  *     tags: [Payment]
  *     security:
  *       - bearerAuth: []
@@ -47,7 +47,7 @@ router.post('/verify', requireAuth, async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Payment verified successfully! Your RAM Agent account is now ACTIVE.',
+      message: 'Payment verified successfully! Your account is now ACTIVE.',
       bonusResult
     });
   } catch (error) {
@@ -78,7 +78,7 @@ router.post('/demo-bypass', requireAuth, async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Demo payment simulated successfully! ₦250 fee marked as paid.',
+      message: 'Demo payment simulated successfully! KSh. 250 fee marked as paid.',
       bonusResult
     });
   } catch (error) {

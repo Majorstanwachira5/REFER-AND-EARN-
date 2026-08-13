@@ -1,4 +1,4 @@
-<%- include('layout/header', { title: 'Refer & Earn More - Agent App (Port 3000)', user: typeof user !== 'undefined' ? user : null }) %>
+<%- include('layout/header', { title: 'Refer & Earn More - Client App (Port 3000)', user: typeof user !== 'undefined' ? user : null }) %>
 
 <div class="landing-hero-container">
     <div class="split-auth-card">
@@ -27,13 +27,13 @@
                     </svg>
                 </div>
                 <h2 class="auth-title">Unlock Your Earnings</h2>
-                <p class="auth-subtitle">Become a RAM Agent & Start Earning Instant Commissions</p>
+                <p class="auth-subtitle">Become a RAM Member & Start Earning Instant Commissions</p>
             </div>
 
             <!-- Tab Switcher -->
             <div class="auth-tabs">
                 <button type="button" class="tab-btn <%= typeof activeTab === 'undefined' || activeTab === 'login' ? 'active' : '' %>" onclick="switchAuthTab('login')">
-                    <i class="fa-solid fa-lock"></i> Agent Sign In
+                    <i class="fa-solid fa-lock"></i> Member Sign In
                 </button>
                 <button type="button" class="tab-btn <%= typeof activeTab !== 'undefined' && activeTab === 'register' ? 'active' : '' %>" onclick="switchAuthTab('register')">
                     <i class="fa-solid fa-user-plus"></i> Join Network
@@ -51,7 +51,7 @@
             <form id="login-form" action="/login" method="POST" class="auth-form <%= typeof activeTab === 'undefined' || activeTab === 'login' ? '' : 'hidden' %>">
                 <div class="form-group">
                     <label for="login-email"><i class="fa-solid fa-envelope gold-text"></i> Email Address</label>
-                    <input type="email" id="login-email" name="email" placeholder="agent@example.com" required autocomplete="email">
+                    <input type="email" id="login-email" name="email" placeholder="user@example.com" required autocomplete="email">
                 </div>
 
                 <div class="form-group">
@@ -62,10 +62,6 @@
                 <button type="submit" class="btn btn-gold btn-block btn-lg">
                     <i class="fa-solid fa-right-to-bracket"></i> Sign In To Dashboard
                 </button>
-
-                <div class="form-footer-note">
-                    Don't have an account yet? <a href="javascript:void(0)" onclick="switchAuthTab('register')" class="gold-link">Register as a RAM Agent</a>
-                </div>
             </form>
 
             <!-- REGISTER FORM -->
@@ -92,11 +88,11 @@
 
                 <div class="fee-notice-box">
                     <i class="fa-solid fa-circle-info gold-text"></i>
-                    <span>One-time registration fee: <strong>₦250</strong> (Pay via Paystack).</span>
+                    <span>One-time registration fee: <strong>KSh. 250</strong> (Pay via Paystack).</span>
                 </div>
 
                 <button type="submit" class="btn btn-gold btn-block btn-lg">
-                    <i class="fa-solid fa-bolt"></i> Register & Proceed to Pay ₦250
+                    <i class="fa-solid fa-bolt"></i> Register & Proceed to Pay KSh. 250
                 </button>
             </form>
         </div>
@@ -115,7 +111,7 @@
                         <div class="step-number">1</div>
                         <div class="step-content">
                             <h3><i class="fa-solid fa-credit-card gold-text"></i> Step 1: Join</h3>
-                            <p>Pay a one-time joining fee of <strong>₦250</strong> via Paystack to activate your RAM Agent license.</p>
+                            <p>Pay a one-time joining fee of <strong>KSh. 250</strong> via Paystack to activate your RAM account.</p>
                         </div>
                     </div>
 
@@ -123,7 +119,7 @@
                         <div class="step-number">2</div>
                         <div class="step-content">
                             <h3><i class="fa-solid fa-share-nodes gold-text"></i> Step 2: Refer</h3>
-                            <p>Get your unique agent link (e.g. <code>localhost:3000/register?ref=RAM123</code>) and share it.</p>
+                            <p>Get your unique referral link (e.g. <code>localhost:3000/register?ref=RAM123</code>) and share it.</p>
                         </div>
                     </div>
 
@@ -132,8 +128,8 @@
                         <div class="step-content">
                             <h3><i class="fa-solid fa-sack-dollar gold-text"></i> Step 3: Earn</h3>
                             <ul class="earning-highlights">
-                                <li><i class="fa-solid fa-circle-check text-gold"></i> <strong>₦100 Instant Commission</strong> for Direct referrals (Level 1).</li>
-                                <li><i class="fa-solid fa-circle-check text-gold"></i> <strong>₦50 Instant Commission</strong> for Indirect referrals (Level 2).</li>
+                                <li><i class="fa-solid fa-circle-check text-gold"></i> <strong>KSh. 100 Instant Commission</strong> for Direct referrals (Level 1).</li>
+                                <li><i class="fa-solid fa-circle-check text-gold"></i> <strong>KSh. 50 Instant Commission</strong> for Indirect referrals (Level 2).</li>
                             </ul>
                         </div>
                     </div>
@@ -141,7 +137,7 @@
 
                 <div class="instructions-cta">
                     <button type="button" class="btn btn-outline-gold btn-block" onclick="switchAuthTab('register')">
-                        <i class="fa-solid fa-rocket"></i> Join Network Now - ₦250
+                        <i class="fa-solid fa-rocket"></i> Join Network Now - KSh. 250
                     </button>
                 </div>
             </div>

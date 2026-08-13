@@ -42,7 +42,7 @@ async function requirePaid(req, res, next) {
   }
 
   if (Number(req.user.paid_status) !== 1) {
-    return res.status(402).json({ success: false, message: 'Account activation required. ₦250 fee unpaid.' });
+    return res.status(402).json({ success: false, message: 'Account activation required. KSh. 250 fee unpaid.' });
   }
 
   next();

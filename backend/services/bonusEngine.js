@@ -51,7 +51,7 @@ async function processReferralBonus(newUserId) {
         [level1ReferrerId, newUserId, 1, L1_COMMISSION]
       );
 
-      console.log(`[BonusEngine] Credited ₦100 Level 1 Bonus to User ${level1ReferrerId} (${level1Referrer.name})`);
+      console.log(`[BonusEngine] Credited KSh. 100 Level 1 Bonus to User ${level1ReferrerId} (${level1Referrer.name})`);
     }
 
     // Check Level 2 (Indirect)
@@ -87,7 +87,7 @@ async function processReferralBonus(newUserId) {
             [level2ReferrerId, newUserId, 2, L2_COMMISSION]
           );
 
-          console.log(`[BonusEngine] Credited ₦50 Level 2 Bonus to User ${level2ReferrerId} (${level2Referrer.name})`);
+          console.log(`[BonusEngine] Credited KSh. 50 Level 2 Bonus to User ${level2ReferrerId} (${level2Referrer.name})`);
         }
       }
     }

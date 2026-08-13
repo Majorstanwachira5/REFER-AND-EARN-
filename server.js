@@ -7,7 +7,7 @@ console.log(`  REFER & EARN MORE (RAMNET) - MULTI-SERVICE SYSTEM   `);
 console.log(`=======================================================`);
 console.log(`  Starting 3 Services Concurrently:`);
 console.log(`   1. Backend API & Swagger Docs -> http://localhost:8080/api-docs`);
-console.log(`   2. Agent Frontend Application  -> http://localhost:3000`);
+console.log(`   2. Frontend Client Application -> http://localhost:3000`);
 console.log(`   3. Admin Management Portal     -> http://localhost:3001`);
 console.log(`=======================================================\n`);
 

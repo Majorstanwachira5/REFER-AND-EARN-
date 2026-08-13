@@ -495,7 +495,7 @@ body {
 
 .badge-status-active { background: rgba(16, 185, 129, 0.2); color: #34d399; font-size: 0.8rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
 
-.agent-code-badge {
+.agent-code-badge, .user-code-badge {
     background: rgba(7, 22, 38, 0.8);
     border: 1px solid var(--gold-primary);
     padding: 10px 20px;

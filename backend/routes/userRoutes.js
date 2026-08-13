@@ -7,8 +7,8 @@ const db = require('../config/database');
  * @openapi
  * /api/user/dashboard:
  *   get:
- *     summary: Fetch Agent Dashboard statistics, referral tree, and transactions
- *     tags: [Agent Dashboard]
+ *     summary: Fetch Dashboard statistics, referral tree, and transactions
+ *     tags: [Member Dashboard]
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
@@ -77,7 +77,7 @@ router.get('/dashboard', requireAuth, requirePaid, async (req, res) => {
  * /api/user/withdraw:
  *   post:
  *     summary: Request wallet funds withdrawal
- *     tags: [Agent Dashboard]
+ *     tags: [Member Dashboard]
  *     security:
  *       - bearerAuth: []
  *       - cookieAuth: []
@@ -90,8 +90,8 @@ router.get('/dashboard', requireAuth, requirePaid, async (req, res) => {
  *             required: [amount, bankName, accountNumber]
  *             properties:
  *               amount: { type: number, example: 500 }
- *               bankName: { type: string, example: 'GTBank' }
- *               accountNumber: { type: string, example: '0123456789' }
+ *               bankName: { type: string, example: 'M-Pesa' }
+ *               accountNumber: { type: string, example: '0712345678' }
  *     responses:
  *       200:
  *         description: Withdrawal request processed successfully.
@@ -106,7 +106,7 @@ router.post('/withdraw', requireAuth, requirePaid, async (req, res) => {
     }
 
     if (!bankName || !accountNumber) {
-      return res.status(400).json({ success: false, message: 'Bank Name and Account Number are required.' });
+      return res.status(400).json({ success: false, message: 'Bank / M-Pesa Name and Account Number are required.' });
     }
 
     const user = await db.get('SELECT wallet_balance FROM users WHERE id = ?', [req.user.id]);
@@ -114,7 +114,7 @@ router.post('/withdraw', requireAuth, requirePaid, async (req, res) => {
     if (user.wallet_balance < withdrawAmount) {
       return res.status(400).json({
         success: false,
-        message: `Insufficient wallet balance. You have ₦${user.wallet_balance.toFixed(2)} available.`
+        message: `Insufficient wallet balance. You have KSh. ${user.wallet_balance.toFixed(2)} available.`
       });
     }
 
@@ -135,7 +135,7 @@ router.post('/withdraw', requireAuth, requirePaid, async (req, res) => {
 
     return res.json({
       success: true,
-      message: `Withdrawal request of ₦${withdrawAmount.toFixed(2)} submitted successfully!`
+      message: `Withdrawal request of KSh. ${withdrawAmount.toFixed(2)} submitted successfully!`
     });
   } catch (error) {
     console.error('[Withdrawal API Error]', error);

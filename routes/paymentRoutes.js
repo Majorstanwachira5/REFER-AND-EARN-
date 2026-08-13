@@ -6,7 +6,6 @@ const { processReferralBonus } = require('../services/bonusEngine');
 
 // GET /pay - Payment checkout screen
 router.get('/pay', requireAuth, (req, res) => {
-  // If user has already paid, redirect straight to dashboard
   if (Number(req.user.paid_status) === 1) {
     return res.redirect('/dashboard');
   }
@@ -27,7 +26,6 @@ router.post('/api/payment/verify', requireAuth, async (req, res) => {
       return res.status(400).json({ success: false, message: 'Payment reference is required.' });
     }
 
-    // Verify payment status with Paystack service
     const verification = await verifyPaystackTransaction(reference);
 
     if (!verification.success) {
@@ -37,16 +35,11 @@ router.post('/api/payment/verify', requireAuth, async (req, res) => {
       });
     }
 
-    // Process user account activation and referral bonus engine
     const bonusResult = await processReferralBonus(req.user.id);
-
-    if (!bonusResult.success) {
-      console.warn('[Payment Route] Bonus processing warning:', bonusResult.message);
-    }
 
     return res.json({
       success: true,
-      message: 'Payment verified successfully! Your RAM Agent account is now ACTIVE.',
+      message: 'Payment verified successfully! Your account is now ACTIVE.',
       redirect: '/dashboard'
     });
   } catch (error) {
@@ -68,7 +61,7 @@ router.post('/api/payment/demo-bypass', requireAuth, async (req, res) => {
     return res.json({
       success: true,
       reference: demoRef,
-      message: 'Demo payment simulated successfully! ₦250 fee marked as paid.',
+      message: 'Demo payment simulated successfully! KSh. 250 fee marked as paid.',
       redirect: '/dashboard'
     });
   } catch (error) {

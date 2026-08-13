@@ -1,11 +1,11 @@
-<%- include('layout/header', { title: 'Activate Account - Pay ₦250 Fee', user: user }) %>
+<%- include('layout/header', { title: 'Activate Account - Pay KSh. 250 Fee', user: user }) %>
 
 <div class="checkout-container">
     <div class="checkout-card">
         <div class="checkout-header">
             <div class="checkout-badge"><i class="fa-solid fa-shield-halved"></i> Account Activation Required</div>
-            <h2>Pay One-Time ₦250 Fee</h2>
-            <p>Welcome, <strong><%= user.name %></strong>! Pay your agent joining fee to receive your unique referral link and start earning commissions.</p>
+            <h2>Pay One-Time KSh. 250 Fee</h2>
+            <p>Welcome, <strong><%= user.name %></strong>! Pay your joining fee to receive your unique referral link and start earning commissions.</p>
         </div>
 
         <div class="summary-box">
@@ -24,14 +24,14 @@
             <hr class="summary-divider">
             <div class="summary-row total">
                 <span>Registration Fee</span>
-                <span class="total-amount">₦250.00</span>
+                <span class="total-amount">KSh. 250.00</span>
             </div>
         </div>
 
         <div class="payment-actions">
             <!-- Paystack Inline Launcher Button -->
             <button type="button" id="paystack-btn" class="btn btn-gold btn-block btn-lg">
-                <i class="fa-solid fa-credit-card"></i> Pay ₦250 Securely with Paystack
+                <i class="fa-solid fa-credit-card"></i> Pay KSh. 250 Securely with Paystack
             </button>
 
             <div class="or-divider">
@@ -61,44 +61,41 @@
     const USER_ID = <%= user.id %>;
 
     document.getElementById('paystack-btn').addEventListener('click', function() {
-        // Generate unique Paystack transaction reference
         const reference = 'RAM_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
 
         const handler = PaystackPop.setup({
             key: PAYSTACK_PUBLIC_KEY,
             email: USER_EMAIL,
-            amount: 25000, // ₦250 in Kobo
-            currency: 'NGN',
+            amount: 25000, // KSh. 250 in cents
+            currency: 'KES',
             ref: reference,
             metadata: {
                 custom_fields: [
                     {
-                        display_name: "Agent Name",
-                        variable_name: "agent_name",
+                        display_name: "Member Name",
+                        variable_name: "member_name",
                         value: USER_NAME
                     },
                     {
-                        display_name: "Agent ID",
-                        variable_name: "agent_id",
+                        display_name: "Member ID",
+                        variable_name: "member_id",
                         value: USER_ID
                     }
                 ]
             },
             callback: function(response) {
-                // Payment success callback from Paystack
                 verifyPaymentOnServer(response.reference);
             },
             onClose: function() {
-                alert('Payment window closed. Please complete payment to activate your agent dashboard.');
+                alert('Payment window closed. Please complete payment to activate your dashboard.');
             }
         });
 
         handler.openIframe();
     });
 
-    // Sandbox Demo Bypass Handler
     document.getElementById('demo-bypass-btn').addEventListener('click', async function() {
-        if (!confirm('Simulate successful ₦250 payment for testing?')) return;
+        if (!confirm('Simulate successful KSh. 250 payment for testing?')) return;
         
         try {
             const res = await fetch('/api/payment/demo-bypass', {

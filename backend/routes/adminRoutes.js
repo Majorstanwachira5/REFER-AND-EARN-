@@ -8,7 +8,7 @@ const { processReferralBonus } = require('../services/bonusEngine');
  * @openapi
  * /api/admin/stats:
  *   get:
- *     summary: Get platform executive analytics (Revenue, Payouts, Net Margin, Agent Counts)
+ *     summary: Get platform executive analytics (Revenue, Payouts, Net Margin, Member Counts)
  *     tags: [Admin Management]
  *     security:
  *       - bearerAuth: []
@@ -20,13 +20,13 @@ const { processReferralBonus } = require('../services/bonusEngine');
 router.get('/stats', requireAuth, requireAdmin, async (req, res) => {
   try {
     const allUsers = await db.all('SELECT id, role, paid_status, wallet_balance FROM users');
-    const agents = allUsers.filter(u => u.role === 'agent');
+    const members = allUsers.filter(u => u.role !== 'admin');
 
-    const totalAgents = agents.length;
-    const paidAgents = agents.filter(u => Number(u.paid_status) === 1).length;
+    const totalAgents = members.length;
+    const paidAgents = members.filter(u => Number(u.paid_status) === 1).length;
     const unpaidAgents = totalAgents - paidAgents;
 
-    // Financial math: ₦250 fee per paid agent
+    // Financial math: KSh. 250 fee per paid member
     const REGISTRATION_FEE = 250.00;
     const totalPlatformRevenue = paidAgents * REGISTRATION_FEE;
 
@@ -84,7 +84,7 @@ router.get('/users', requireAuth, requireAdmin, async (req, res) => {
  * @openapi
  * /api/admin/users/{id}/activate:
  *   post:
- *     summary: Manually activate an unpaid agent account and trigger commission distribution
+ *     summary: Manually activate an unpaid member account and trigger commission distribution
  *     tags: [Admin Management]
  *     security:
  *       - bearerAuth: []

@@ -41,7 +41,7 @@ function switchAuthTab(tab) {
 }
 
 /**
- * Copy Agent Referral Link to Clipboard
+ * Copy Referral Link to Clipboard
  */
 function copyReferralLink() {
     const linkInput = document.getElementById('referral-url-input');

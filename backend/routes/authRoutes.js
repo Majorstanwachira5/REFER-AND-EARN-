@@ -18,7 +18,7 @@ function generateReferralCode() {
  * @openapi
  * /api/auth/register:
  *   post:
- *     summary: Register a new user/agent account
+ *     summary: Register a new user account
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
@@ -71,11 +71,11 @@ router.post('/register', async (req, res) => {
 
     const result = await db.run(
       'INSERT INTO users (name, email, password, role, referral_code, referred_by, wallet_balance, paid_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, 'agent', userRefCode, referrerId, 0.00, 0]
+      [name, email, hashedPassword, 'member', userRefCode, referrerId, 0.00, 0]
     );
 
     const newUserId = result.lastID;
-    const token = jwt.sign({ id: newUserId, email, name, role: 'agent' }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ id: newUserId, email, name, role: 'member' }, JWT_SECRET, { expiresIn: '7d' });
 
     res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
 

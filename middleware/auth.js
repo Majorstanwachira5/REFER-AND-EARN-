@@ -51,7 +51,7 @@ async function requirePaid(req, res, next) {
 
   if (Number(req.user.paid_status) !== 1) {
     if (req.originalUrl.startsWith('/api/')) {
-      return res.status(402).json({ success: false, message: 'Payment of ₦250 fee required to activate agent account' });
+      return res.status(402).json({ success: false, message: 'Payment of KSh. 250 fee required to activate account' });
     }
     return res.redirect('/pay');
   }

@@ -54,7 +54,7 @@
                     <h2>System Administrator Command Center</h2>
                     <p>Real-time platform financial tracking, 2-tier referral audit logs, and user management.</p>
                 </div>
-                <div class="agent-code-badge">
+                <div class="user-code-badge">
                     <span class="badge-label">ROLE</span>
                     <span class="badge-code" style="font-size: 1.1rem; color: #f5a623;">SUPER ADMIN</span>
                 </div>
@@ -67,8 +67,8 @@
                     <div class="stat-icon"><i class="fa-solid fa-coins"></i></div>
                     <div class="stat-details">
                         <span class="stat-label">Total Platform Revenue</span>
-                        <h3 class="stat-value gold-text">₦<%= Number(stats.totalPlatformRevenue).toLocaleString('en-NG', { minimumFractionDigits: 2 }) %></h3>
-                        <span class="stat-earned">From <%= stats.paidAgents %> Paid Agents (₦250 fee)</span>
+                        <h3 class="stat-value gold-text">KSh. <%= Number(stats.totalPlatformRevenue).toLocaleString('en-KE', { minimumFractionDigits: 2 }) %></h3>
+                        <span class="stat-earned">From <%= stats.paidAgents %> Paid Members (KSh. 250 fee)</span>
                     </div>
                 </div>
 
@@ -77,8 +77,8 @@
                     <div class="stat-icon direct"><i class="fa-solid fa-hand-holding-dollar"></i></div>
                     <div class="stat-details">
                         <span class="stat-label">Total Commissions Paid</span>
-                        <h3 class="stat-value">₦<%= Number(stats.totalCommissionsPaid).toLocaleString('en-NG', { minimumFractionDigits: 2 }) %></h3>
-                        <span class="stat-earned">Distributed L1 (₦100) & L2 (₦50)</span>
+                        <h3 class="stat-value">KSh. <%= Number(stats.totalCommissionsPaid).toLocaleString('en-KE', { minimumFractionDigits: 2 }) %></h3>
+                        <span class="stat-earned">Distributed L1 (KSh. 100) & L2 (KSh. 50)</span>
                     </div>
                 </div>
 
@@ -87,17 +87,17 @@
                     <div class="stat-icon total"><i class="fa-solid fa-chart-line"></i></div>
                     <div class="stat-details">
                         <span class="stat-label">Company Net Margin</span>
-                        <h3 class="stat-value text-success">₦<%= Number(stats.companyNetMargin).toLocaleString('en-NG', { minimumFractionDigits: 2 }) %></h3>
-                        <span class="stat-earned">Net Platform Profit (₦100 / user)</span>
+                        <h3 class="stat-value text-success">KSh. <%= Number(stats.companyNetMargin).toLocaleString('en-KE', { minimumFractionDigits: 2 }) %></h3>
+                        <span class="stat-earned">Net Platform Profit (KSh. 100 / user)</span>
                     </div>
                 </div>
 
-                <!-- Agent Counts -->
+                <!-- User Counts -->
                 <div class="stat-card">
                     <div class="stat-icon indirect"><i class="fa-solid fa-users"></i></div>
                     <div class="stat-details">
-                        <span class="stat-label">Total Agents Registered</span>
-                        <h3 class="stat-value"><%= stats.totalAgents %> <span class="stat-sub">Users</span></h3>
+                        <span class="stat-label">Total Members Registered</span>
+                        <h3 class="stat-value"><%= stats.totalAgents %> <span class="stat-sub">Members</span></h3>
                         <span class="stat-earned"><%= stats.paidAgents %> Active / <%= stats.unpaidAgents %> Unpaid</span>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
             <!-- User Management Table -->
             <div class="dashboard-card" style="margin-top: 20px;">
                 <div class="card-header">
-                    <h3><i class="fa-solid fa-users-gear gold-text"></i> System Users & Agents Directory</h3>
+                    <h3><i class="fa-solid fa-users-gear gold-text"></i> System Users Directory</h3>
                     <span class="badge-gold"><%= users.length %> Total Records</span>
                 </div>
                 <div class="card-body">
@@ -132,12 +132,12 @@
                                         <td><%= u.email %></td>
                                         <td><span class="badge-level"><%= u.role %></span></td>
                                         <td><code><%= u.referral_code %></code></td>
-                                        <td><strong class="gold-text">₦<%= Number(u.wallet_balance).toFixed(2) %></strong></td>
+                                        <td><strong class="gold-text">KSh. <%= Number(u.wallet_balance).toFixed(2) %></strong></td>
                                         <td>
                                             <% if (Number(u.paid_status) === 1) { %>
                                                 <span class="badge-status-active">PAID / ACTIVE</span>
                                             <% } else { %>
-                                                <span class="status-badge pending">UNPAID (₦250)</span>
+                                                <span class="status-badge pending">UNPAID (KSh. 250)</span>
                                             <% } %>
                                         </td>
                                         <td>
@@ -187,7 +187,7 @@
                                             <td><%= tx.user_email %></td>
                                             <td><%= tx.description %></td>
                                             <td><span class="<%= tx.type === 'credit' ? 'text-success' : 'text-danger' %>"><%= tx.type.toUpperCase() %></span></td>
-                                            <td><strong class="<%= tx.type === 'credit' ? 'text-success' : 'text-danger' %>"><%= tx.type === 'credit' ? '+' : '-' %>₦<%= Number(tx.amount).toFixed(2) %></strong></td>
+                                            <td><strong class="<%= tx.type === 'credit' ? 'text-success' : 'text-danger' %>"><%= tx.type === 'credit' ? '+' : '-' %>KSh. <%= Number(tx.amount).toFixed(2) %></strong></td>
                                             <td><%= new Date(tx.created_at).toLocaleString() %></td>
                                         </tr>
                                     <% }); %>

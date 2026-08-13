@@ -7,7 +7,7 @@ const options = {
     info: {
       title: 'Refer & Earn More (RamNet) API Specification',
       version: '2.0.0',
-      description: 'Production-ready REST API for the Refer & Earn More 2-Tier Referral Earning System. Includes user authentication, Paystack ₦250 payment verification, Level 1 & Level 2 commission distributions, Agent dashboard statistics, and Admin platform analytics.',
+      description: 'Production-ready REST API for the Refer & Earn More 2-Tier Referral Earning System. Includes user authentication, Paystack KSh. 250 payment verification, Level 1 (KSh. 100) & Level 2 (KSh. 50) commission distributions, Member dashboard statistics, and Admin platform analytics.',
       contact: {
         name: 'RamNet Engineering Team',
         email: 'api@ramnet.com'
@@ -40,8 +40,8 @@ const options = {
           properties: {
             id: { type: 'integer', example: 1 },
             name: { type: 'string', example: 'John Doe' },
-            email: { type: 'string', example: 'agent@example.com' },
-            role: { type: 'string', example: 'agent' },
+            email: { type: 'string', example: 'user@example.com' },
+            role: { type: 'string', example: 'member' },
             referral_code: { type: 'string', example: 'RAM8X92K' },
             wallet_balance: { type: 'number', example: 150.00 },
             paid_status: { type: 'integer', example: 1 }
@@ -79,7 +79,7 @@ const swaggerSpec = swaggerJSDoc(options);
 
 function setupSwagger(app) {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
-    customCss: '.swagger-ui .topbar { background-color: #0a2540; border-bottom: 2px solid #f5a623; } .swagger-ui .topbar a { content: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 64 64\' width=\'40\'><circle cx=\'32\' cy=\'32\' r=\'30\' fill=\'%23f5a623\'/><text x=\'50%\' y=\'55%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-weight=\'bold\' fill=\'%230a2540\'>RAM</text></svg>"); }',
+    customCss: '.swagger-ui .topbar { background-color: #0a2540; border-bottom: 2px solid #f5a623; }',
     customSiteTitle: 'RamNet API Documentation & Swagger UI'
   }));
 

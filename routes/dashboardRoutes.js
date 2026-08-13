@@ -3,15 +3,13 @@ const router = express.Router();
 const { requireAuth, requirePaid } = require('../middleware/auth');
 const db = require('../config/database');
 
-// GET /dashboard - Full Agent Dashboard
+// GET /dashboard - Dashboard
 router.get('/dashboard', requireAuth, requirePaid, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    // Refresh user record from DB to get latest wallet_balance
     const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
 
-    // Fetch Direct Referrals (Level 1)
     const directReferrals = await db.all(
       `SELECT r.*, u.name as referee_name, u.email as referee_email, u.paid_status as referee_paid_status, u.created_at as joined_at
        FROM referrals r
@@ -21,7 +19,6 @@ router.get('/dashboard', requireAuth, requirePaid, async (req, res) => {
       [userId]
     );
 
-    // Fetch Indirect Referrals (Level 2)
     const indirectReferrals = await db.all(
       `SELECT r.*, u.name as referee_name, u.email as referee_email, u.paid_status as referee_paid_status, u.created_at as joined_at
        FROM referrals r
@@ -31,7 +28,6 @@ router.get('/dashboard', requireAuth, requirePaid, async (req, res) => {
       [userId]
     );
 
-    // Calculate totals
     const directCount = directReferrals.length;
     const indirectCount = indirectReferrals.length;
 
@@ -39,13 +35,11 @@ router.get('/dashboard', requireAuth, requirePaid, async (req, res) => {
     const indirectEarnings = indirectReferrals.reduce((sum, r) => sum + Number(r.commission_earned), 0);
     const totalEarned = directEarnings + indirectEarnings;
 
-    // Fetch Recent Transactions
     const transactions = await db.all(
       'SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC LIMIT 20',
       [userId]
     );
 
-    // Construct full referral link URL
     const host = req.get('host') || 'localhost:3000';
     const protocol = req.protocol || 'http';
     const referralLink = `${protocol}://${host}/register?ref=${user.referral_code}`;
@@ -87,26 +81,23 @@ router.post('/api/withdraw', requireAuth, requirePaid, async (req, res) => {
     }
 
     if (!bankName || !accountNumber) {
-      return res.status(400).json({ success: false, message: 'Bank Name and Account Number are required.' });
+      return res.status(400).json({ success: false, message: 'Bank / M-Pesa Name and Account Number are required.' });
     }
 
-    // Refresh user balance from database
     const user = await db.get('SELECT wallet_balance FROM users WHERE id = ?', [req.user.id]);
 
     if (user.wallet_balance < withdrawAmount) {
       return res.status(400).json({
         success: false,
-        message: `Insufficient wallet balance. You have ₦${user.wallet_balance.toFixed(2)} available.`
+        message: `Insufficient wallet balance. You have KSh. ${user.wallet_balance.toFixed(2)} available.`
       });
     }
 
-    // Deduct wallet balance
     await db.run('UPDATE users SET wallet_balance = wallet_balance - ? WHERE id = ?', [
       withdrawAmount,
       req.user.id
     ]);
 
-    // Log debit transaction
     await db.run(
       'INSERT INTO transactions (user_id, amount, type, description) VALUES (?, ?, ?, ?)',
       [
@@ -119,7 +110,7 @@ router.post('/api/withdraw', requireAuth, requirePaid, async (req, res) => {
 
     return res.json({
       success: true,
-      message: `Withdrawal request of ₦${withdrawAmount.toFixed(2)} submitted successfully!`
+      message: `Withdrawal request of KSh. ${withdrawAmount.toFixed(2)} submitted successfully!`
     });
   } catch (error) {
     console.error('[Withdrawal Error]', error);

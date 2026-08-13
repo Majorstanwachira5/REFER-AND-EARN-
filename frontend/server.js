@@ -14,7 +14,6 @@ app.use(cookieParser());
 
 // Serve static files from frontend/public
 app.use(express.static(path.join(__dirname, 'public')));
-// Fallback for public root
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.set('view engine', 'ejs');
@@ -41,7 +40,7 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// GET / - Root Agent Page
+// GET / - Root Page
 app.get('/', (req, res) => {
   if (req.user) {
     if (Number(req.user.paid_status) === 1) {
@@ -107,7 +106,7 @@ app.get('/pay', (req, res) => {
   });
 });
 
-// GET /dashboard - Agent Dashboard
+// GET /dashboard - Dashboard
 app.get('/dashboard', async (req, res) => {
   if (!req.user) return res.redirect('/login');
   if (Number(req.user.paid_status) !== 1) return res.redirect('/pay');
@@ -143,7 +142,7 @@ app.get('/logout', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`=======================================================`);
-  console.log(`  RAMNET AGENT FRONTEND RUNNING ON PORT ${PORT}`);
-  console.log(`  Access Agent App: http://localhost:${PORT}`);
+  console.log(`  RAMNET FRONTEND CLIENT RUNNING ON PORT ${PORT}`);
+  console.log(`  Access App: http://localhost:${PORT}`);
   console.log(`=======================================================`);
 });

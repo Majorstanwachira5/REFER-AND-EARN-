@@ -15,7 +15,8 @@ async function verifyPaystackTransaction(reference) {
     return {
       success: true,
       status: 'success',
-      amount: 25000,
+      amount: 25000, // KSh. 250 in cents
+      currency: 'KES',
       reference,
       gateway_response: 'Successful (Demo Sandbox Mode)',
       paid_at: new Date().toISOString()
@@ -56,6 +57,7 @@ async function verifyPaystackTransaction(reference) {
         success: true,
         status: 'success',
         amount: 25000,
+        currency: 'KES',
         reference,
         gateway_response: 'Fallback Test Verification Approved'
       };
